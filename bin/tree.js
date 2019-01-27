@@ -28,14 +28,14 @@ program
 	.option(
 		'--folder-name [prefix{name}postfix]',
 		'The folder name of the output is accompanied by a prefix and suffix, where {name} represents the folder name. ' +
-			'Note: Before you use the symbol you need to add \\ . ' +
+			'Note: Before you use some symbols you need to add \\ , like `()` . ' +
 			'If you need more advanced actions, such as editing folder names, use program calls.',
 		name => folderName => name.replace(/{\s*name\s*}/gi, folderName)
 	)
 	.option(
 		'--file-name [prefix{name}postfix]',
 		'The file name of the output is accompanied by a prefix and suffix, where {name} represents the file name. ' +
-			'Note: Before you use the symbol you need to add \\ . ' +
+		'Note: Before you use some symbols you need to add \\ , like `()` . ' +
 			'If you need more advanced actions, such as editing file names, use program calls.',
 		name => fileName => name.replace(/{\s*name\s*}/gi, fileName)
 	)

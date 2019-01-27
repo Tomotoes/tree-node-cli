@@ -5,7 +5,7 @@ const DEFAULT_OPTIONS = {
 	allFiles: false,
 	dirsFirst: false,
 	dirsOnly: false,
-	exclude: [/\.DS_Store/, /node-modules/],
+	exclude: [/\.DS_Store/, /node_modules/],
 	maxDepth: Number.POSITIVE_INFINITY,
 	reverse: false,
 	folderName: name => name,
@@ -47,20 +47,19 @@ const handleOptions = (options, files, filePath) => {
 	return files
 }
 
-function print(
+const print = (
 	{ file, filePath, currentDepth, precedingSymbols, isLast },
 	options
-) {
+) => {
+	const lines = []
 
-  const lines = []
-  
 	if (options.exclude.find(pattern => pattern.test(filePath))) {
 		return lines
 	}
 
-  if (currentDepth > options.maxDepth) {
-    return lines
-  }
+	if (currentDepth > options.maxDepth) {
+		return lines
+	}
 
 	const isDir = isDirectory(filePath)
 
@@ -98,13 +97,14 @@ function print(
 		}
 
     const linesForFile = print(fileAttributes, options)
-
-    lines.push(...linesForFile)
-	})
+    
+		lines.push(...linesForFile)
+  })
+  
 	return lines
 }
 
-function tree(filePath = '.', program) {
+const tree = (filePath = '.', program) => {
 	const combinedOptions = [
 		'allFiles',
 		'dirsFirst',
@@ -127,8 +127,8 @@ function tree(filePath = '.', program) {
 		currentDepth: 0,
 		precedingSymbols: '',
 		isLast: false
-	}
-
+  }
+  
 	const output = print(fileAttributes, combinedOptions).join('\n')
 	return output
 }

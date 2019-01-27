@@ -6,6 +6,8 @@ Tree is a recursive directory listing program that produces a depth indented lis
 
 Note: Symlinks are not followed.
 
+
+
 ## Installation
 
 ```bash
@@ -14,25 +16,29 @@ $ npm install tree-node-cli
 $ npm install -g tree-node-cli
 ```
 
+
+
 ## Example
 
 ```bash
-$ tree -L 2 -I "node_modules"
-tree-node-cli
-├── LICENSE
-├── README.md
-├── __tests__
-│   ├── __fixtures__
-│   ├── __snapshots__
-│   ├── fixtures
-│   └── tree.test.js
-├── bin
-│   └── tree
+$ tree -L 2 -I "node_modules" --folder-name \({name}\)[http://www.github.com]
+(tree-node-cli)[http://www.github.com]
+├── (bin)[http://www.github.com]
+│   └── tree.js
+├── (coverage)[http://www.github.com]
+│   ├── clover.xml
+│   ├── coverage-final.json
+│   ├── (lcov-report)[http://www.github.com]
+│   └── lcov.info
 ├── jest.config.js
+├── LICENSE
+├── package-lock.json
 ├── package.json
-├── tree.js
-└── yarn.lock
+├── README.md
+└── tree.js
 ```
+
+
 
 ## CLI
 
@@ -44,52 +50,64 @@ $ tree [options] [path/to/dir]
 
 The following options are available:
 
-```txt
+```bash
 $ tree -h
+Usage: tree [options]
 
-  Usage: tree [options]
+Options:
+  -V, --version                        output the version number
+  -a, --all-files                      All files, include hidden files, are printed.
+  --dirs-first                         List directories before files.
+  -d, --dirs-only                      List directories only.
+  -I, --exclude [patterns]             Exclude files that match the pattern. | separates alternate patterns. Wrap your entire pattern in double quotes. E.g. `"node_modules|coverage".
+  -L, --max-depth <n>                  Max display depth of the directory tree.
+  -r, --reverse                        Sort the output in reverse alphabetic order.
+  --folder-name [prefix{name}postfix]  The folder name of the output is accompanied by a prefix and suffix, where {name} represents the folder name. Note: Before you use some symbols you need to add \ , like `()` . If you need more advanced actions, such as editing folder names, use program calls.
+  --file-name [prefix{name}postfix]    The file name of the output is accompanied by a prefix and suffix, where {name} represents the file name. Note: Before you use some symbols you need to add \ , like `()` . If you need more advanced actions, such as editing file names, use program calls.
+  -h, --help                           output usage information
 
-  Options:
 
-    -V, --version             output the version number
-    -a, --all-files           All files, include hidden files, are printed.
-    --dirs-first              List directories before files.
-    -d, --dirs-only           List directories only.
-    -I, --exclude [patterns]  Exclude files that match the pattern. | separates alternate patterns. Wrap your entire pattern in double quotes. E.g. `"node_modules|coverage".
-    -L, --max-depth <n>       Max display depth of the directory tree.
-    -r, --reverse             Sort the output in reverse alphabetic order.
-    -F, --trailing-slash      Append a '/' for directories.
-    -h, --help                output usage information
 ```
+
+
 
 ## API
 
 ```js
 const tree = require('tree-node-cli');
-const string = tree('path/to/dir', options);
+const output = tree('path/to/dir', options);
 ```
 
 `options` is a configuration object with the following fields:
 
-| Field           | Default                    | Type    | Description                                                                                                                           |
-| --------------- | -------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `allFiles`      | `false`                    | Boolean | All files are printed. By default, tree does not print hidden files (those beginning with a dot).                                     |
-| `dirsFirst`     | `false`                    | Boolean | List directories before files.                                                                                                        |
-| `dirsOnly`      | `false`                    | Boolean | List directories only.                                                                                                                |
-| `exclude`       | `[]`                       | Array   | An array of regex to test each filename against. Matching files will be excluded and matching directories will not be traversed into. |
-| `maxDepth`      | `Number.POSITIVE_INFINITY` | Number  | Max display depth of the directory tree.                                                                                              |
-| `reverse`       | `false`                    | Boolean | Sort the output in reverse alphabetic order.                                                                                          |
-| `trailingSlash` | `false`                    | Boolean | Appends a trailing slash behind directories.                                                                                          |
+| Field        | Default                    | Type     | Description                                                  |
+| ------------ | -------------------------- | -------- | ------------------------------------------------------------ |
+| `allFiles`   | `false`                    | Boolean  | All files are printed. By default, tree does not print hidden files (those beginning with a dot). |
+| `dirsFirst`  | `false`                    | Boolean  | List directories before files.                               |
+| `dirsOnly`   | `false`                    | Boolean  | List directories only.                                       |
+| `exclude`    | `[]`                       | Array    | An array of regex to test each filename against. Matching files will be excluded and matching directories will not be traversed into. |
+| `maxDepth`   | `Number.POSITIVE_INFINITY` | Number   | Max display depth of the directory tree.                     |
+| `reverse`    | `false`                    | Boolean  | Sort the output in reverse alphabetic order.                 |
+| `folderName` | `name => name`             | Function | The folder name of the output is accompanied by a prefix and suffix, where {name} represents the folder name. |
+| `fileName`   | `name => name`             | Function | The file name of the output is accompanied by a prefix and suffix, where {name} represents the file name. |
 
 ```js
-const string = tree('path/to/dir', {
+const output = tree('path/to/dir', {
   allFiles: true,
   exclude: [/node_modules/, /lcov/],
   maxDepth: 4,
+  folderName: name => {
+    if(name === 'src'){
+      return 'my code'
+    }
+  },
+  fileName: name => `https://github.com/tomotoes/CSharp/blob/master/${name.split('.')[0]}`
 });
 
-console.log(string);
+console.log(output);
 ```
+
+
 
 ## License
 
