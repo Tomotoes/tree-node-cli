@@ -74,8 +74,8 @@ Options:
 ## API
 
 ```js
-const tree = require('tree-node-cli');
-const output = tree('path/to/dir', options);
+const tree = require('tree-node-cli')
+const output = tree('path/to/dir', options)
 ```
 
 `options` is a configuration object with the following fields:
@@ -92,19 +92,36 @@ const output = tree('path/to/dir', options);
 | `fileName`   | `name => name`             | Function | The file name of the output is accompanied by a prefix and suffix, where {name} represents the file name. |
 
 ```js
-const output = tree('path/to/dir', {
-  allFiles: true,
-  exclude: [/node_modules/, /lcov/],
-  maxDepth: 4,
-  folderName: name => {
-    if(name === 'src'){
-      return 'my code'
-    }
-  },
-  fileName: name => `https://github.com/tomotoes/CSharp/blob/master/${name.split('.')[0]}`
-});
+const tree = require('tree-node-cli')
 
-console.log(output);
+const PRINT_PATH = 'path/to/dir'
+
+const IMAGE_POSTFIX = ['.png', '.jpg', '.jpeg', '.webp']
+
+const isImage = fileName => IMAGE_POSTFIX.find(_ => fileName.endsWith(_))
+
+const output = tree(PRINT_PATH, {
+	allFiles: false,
+	exclude: [/node_modules/, /lcov/],
+	maxDepth: 4,
+	folderName(folderName) {
+		if (folderName === 'src') {
+			return 'my code'
+		}
+		return folderName
+	},
+	fileName(fileName) {
+		if (isImage(fileName)) {
+			return `https://github.com/tomotoes/CSharp/blob/master/${
+				fileName.split('.')[0]
+			}`
+		}
+		return fileName
+	}
+})
+
+console.log(output)
+
 ```
 
 

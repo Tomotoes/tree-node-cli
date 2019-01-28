@@ -72,7 +72,7 @@ const print = (
 	}
 
 	line += options[isDir ? 'folderName' : 'fileName'](file)
-
+	
 	lines.push(line)
 
 	if (isFile) {
@@ -96,11 +96,11 @@ const print = (
 			isLast: index === files.length - 1
 		}
 
-    const linesForFile = print(fileAttributes, options)
-    
+		const linesForFile = print(fileAttributes, options)
+
 		lines.push(...linesForFile)
-  })
-  
+	})
+
 	return lines
 }
 
@@ -127,8 +127,8 @@ const tree = (filePath = '.', program) => {
 		currentDepth: 0,
 		precedingSymbols: '',
 		isLast: false
-  }
-  
+	}
+
 	const output = print(fileAttributes, combinedOptions).join('\n')
 	return output
 }
